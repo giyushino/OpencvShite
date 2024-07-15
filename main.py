@@ -106,6 +106,20 @@ def detectLines(img):
     cv2.imwrite('linesDetected.jpg', img)
     openImage("linesDetected.jpg")
     
+def grayscale(img):
+    image = cv2.imread(img)
+    wn = "Gray Scale {0}".format(img)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    cv2.imshow(wn, gray)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+def callgray(img):
+    image = cv2.imread(img)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite("gray.jpg", gray)
+    return cv2.imread(gray.jpg)
+
 def subtractImages(img1, img2):
     image1 = cv2.imread(img1)
     image2 = cv2.imread(img2)
@@ -120,23 +134,18 @@ def subtractImages(img1, img2):
     if image1.shape != image2.shape:
         image1 = cv2.resize(image1, (image2.shape[1], image2.shape[0]))
 
-    if image1.shape[2] == 3 and image1.shape[2] != 3:
-        gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite("gray_image1.jpg", gray_image1)
-        gray1 = cv2.imread("gray_image1.jpg")
+    if image1.shape[2] == 3 and image2.shape[2] != 3:
+        gray1 = callgray(image1)
         sub = cv2.subtract(gray1, image2)
         cv2.imshow("Subtracted Image", sub)
     elif image2.shape[2] == 3 and image1.shape[2] != 3:
-        gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite("gray_image2.jpg", gray_image2)
-        gray2 = cv2.imread("gray_image2.jpg")
+        gray2 = callgray(image2)
         sub = cv2.subtract(image1, gray2)
         cv2.imshow("Subtracted Image", sub)
     elif image1.shape[2] == 3 and image1.shape[2] == 3:
         sub = cv2.subtract(image1, image2)
         cv2.imshow("Subtracted Image", sub)
-
-    if image1.shape[2] != 3 and image2.shape[2] != 3:
+    elif image1.shape[2] != 3 and image2.shape[2] != 3:
         sub = cv2.subtract(image1, image2)
 
     if cv2.waitKey(0) & 0xff == 27:
