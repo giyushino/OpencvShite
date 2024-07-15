@@ -181,6 +181,27 @@ def bitwiseOperator(img1, img2, operator, mask = None):
                 return "That is not a valid image option"
 
     if cv2.waitKey(0) & 0xff == 27:
-        cv2.destroyAllWindows()                
+        cv2.destroyAllWindows()
+
+def blurring(img, blur, scale = 1):
+    image = cv2.imread(img)
+    if blur == "gaussian":
+        Guassian = cv2.GaussianBlur(image, (7,7), 0)
+        resized_image = rescaleFrame(Guassian, scale)
+        cv2.imshow("Gaussian Blurring", resized_image)
+        cv2.waitKey(0)
+    elif blur == "median":
+        median = cv2.medianBlur(image, 5)
+        resized_image = rescaleFrame(median, scale)
+        cv2.imshow("Median Blurring", resized_image)
+        cv2.waitKey(0)
+    elif blur == "bilateral":
+        bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+        resized_image = rescaleFrame(bilateral, scale)
+        cv2.imshow("Bilateral Blurring", resized_image)
+        cv2.waitKey(0)
+    else:
+        return "That is not a valid blur; please choose between gaussian, median, or bilateral."
+    cv2.destroyAllWindows()
 
 
