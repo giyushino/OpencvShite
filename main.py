@@ -139,9 +139,37 @@ def subtractImages(img1, img2):
     if image1.shape[2] != 3 and image2.shape[2] != 3:
         sub = cv2.subtract(image1, image2)
 
-
-
     if cv2.waitKey(0) & 0xff == 27:
         cv2.destroyAllWindows()
+
+def bitwiseOperator(img1, img2, operator, mask = None):
+    image1 = cv2.imread(img1)
+    image2 = cv2.imread(img2)
+    if image1 is None:
+        print(f"Error loading image1: {img1}")
+        return
+    if image2 is None:
+        print(f"Error loading image2: {img2}")
+        return
+    if image1.shape != image2.shape:
+        print("Images have different dimensions. Resizing image2 to match image1.")
+        image2 = cv2.resize(image2, (image1.shape[1], image1.shape[0]))
+    operations = {"and": cv2.bitwise_and(image2, image1, mask), "or": cv2.bitwise_or(image2, image1, mask),
+                  "not" : "nothing", "xor": cv2.bitwise_xor(image1, image2, mask)}
+
+    if operator in operations:
+        if operator != "not":
+            cv2.imshow("Bitwise {0}".format(operator), operations[operator])
+        else:
+            x = input("img1 or img2 ")
+            if x == "img1":
+                cv2.imshow("Bitwise {0}".format(operator), cv2.bitwise_not(image1, mask))
+            elif x == "img2":
+                cv2.imshow("Bitwise {0}".format(operator), cv2.bitwise_not(image2, mask))
+            else:
+                return "That is not a valid image option"
+
+    if cv2.waitKey(0) & 0xff == 27:
+        cv2.destroyAllWindows()                
 
 
