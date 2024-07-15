@@ -119,6 +119,8 @@ def callgray(img):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     cv2.imwrite("gray.jpg", gray)
     return cv2.imread(gray.jpg)
+    if cv2.waitKey(0) & 0xff == 27:
+        cv2.destroyAllWindows()
 
 def subtractImages(img1, img2):
     image1 = cv2.imread(img1)
