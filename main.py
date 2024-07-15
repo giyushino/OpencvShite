@@ -204,4 +204,17 @@ def blurring(img, blur, scale = 1):
         return "That is not a valid blur; please choose between gaussian, median, or bilateral."
     cv2.destroyAllWindows()
 
+def vidEdgeCapture(vid):
+    cap = cv2.VideoCapture(vid)
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        frame = cv2.resize(frame, (540, 380), fx = 0, fy = 0, interpolation = cv2.INTER_CUBIC)
+        cv2.imshow("Frame", frame)
+        edge_detect = cv2.Canny(frame, 100, 200)
+        cv2.imshow("Edge detect", edge_detect)
+        if cv2.waitKey(25) & 0xFF == ord("d"):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
 
