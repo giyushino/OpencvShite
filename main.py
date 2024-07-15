@@ -39,6 +39,7 @@ if not os.path.exists(asset_zip_path):
 capture = cv2.VideoCapture("lp_image.mov")
 while True:
   isTrue, frame = capture.read()
+  # resized_frame = rescaleFrame(frame)
   cv2.imshow('Video', frame)
   if cv2.waitKey(20) & 0xFF==ord('d'):
     break
