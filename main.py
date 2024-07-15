@@ -105,13 +105,43 @@ def detectLines(img):
 
     cv2.imwrite('linesDetected.jpg', img)
     openImage("linesDetected.jpg")
+    
+def subtractImages(img1, img2):
+    image1 = cv2.imread(img1)
+    image2 = cv2.imread(img2)
+
+    if image1 is None:
+        print(f"Error loading image1: {img1}")
+        return
+    if image2 is None:
+        print(f"Error loading image2: {img2}")
+        return
+
+    if image1.shape != image2.shape:
+        image1 = cv2.resize(image1, (image2.shape[1], image2.shape[0]))
+
+    if image1.shape[2] == 3 and image1.shape[2] != 3:
+        gray_image1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite("gray_image1.jpg", gray_image1)
+        gray1 = cv2.imread("gray_image1.jpg")
+        sub = cv2.subtract(gray1, image2)
+        cv2.imshow("Subtracted Image", sub)
+    elif image2.shape[2] == 3 and image1.shape[2] != 3:
+        gray_image2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite("gray_image2.jpg", gray_image2)
+        gray2 = cv2.imread("gray_image2.jpg")
+        sub = cv2.subtract(image1, gray2)
+        cv2.imshow("Subtracted Image", sub)
+    elif image1.shape[2] == 3 and image1.shape[2] == 3:
+        sub = cv2.subtract(image1, image2)
+        cv2.imshow("Subtracted Image", sub)
+
+    if image1.shape[2] != 3 and image2.shape[2] != 3:
+        sub = cv2.subtract(image1, image2)
 
 
-openImage("coca-cola-logo.png")
 
-overlayImages("coca-cola-logo.png", "monkey.png", 0.8, 0.2)
+    if cv2.waitKey(0) & 0xff == 27:
+        cv2.destroyAllWindows()
 
-overlayRect("coca-cola-logo.png", 250, 250, 20, 20, "Hello World!")
-
-openVideo("lp_image.mov")
 
