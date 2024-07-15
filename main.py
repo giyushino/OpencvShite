@@ -31,7 +31,7 @@ def rescaleFrame(frame, scale=0.75):
     dimensions = (width,height)
     return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
 
-# Download if assest ZIP does not exists.
+# Download if asset ZIP does not exist.
 if not os.path.exists(asset_zip_path):
     download_and_unzip(URL, asset_zip_path)
 
