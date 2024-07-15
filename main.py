@@ -43,6 +43,20 @@ cv2.imshow(window_name, image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
+# Overlaying two images
+image1 = cv2.imread("image1")
+image2 = cv2.imread("image2")
+
+if image1.shape != image2.shape:
+    print("Images have different dimensions. Resizing image2 to match image1.")
+    image2 = cv2.resize(image2, (image1.shape[1], image1.shape[0]))
+
+weightedSum = cv2.addWeighted(image1, 0.8, image2, 0.1, 0)
+cv2.imshow("Weighted Image", weightedSum)
+
+if cv2.waitKey(0) & 0xff == 27:
+    cv2.destroyAllWindows()
+
 # Open Videos
 capture = cv2.VideoCapture("lp_image.mov")
 while True:
