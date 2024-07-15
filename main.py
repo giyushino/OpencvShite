@@ -25,12 +25,14 @@ def download_and_unzip(url, save_path):
     except Exception as e:
         print("\nInvalid file.", e)
 
+# Opens an image; img is name of file formatted as a string
 def openImage(img):
     image = cv2.imread("{0}".format(img))
     window_name = "{0}".format(img)
     cv2.imshow(window_name, image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    
 def rescaleFrame(frame, scale= 1):
     # rescales images, video, live-video
     width = int(frame.shape[1] * scale)
@@ -38,6 +40,7 @@ def rescaleFrame(frame, scale= 1):
     dimensions = (width, height)
     return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
 
+# Opens a video; vid is name of file formatted as a string
 def openVideo(vid):
     capture = cv2.VideoCapture("{}".format(vid))
     while True:
@@ -49,10 +52,11 @@ def openVideo(vid):
     capture.release()
     cv2.destroyAllWindows()
 
-def overlayRect(image1, upperx, uppery, lowerx, lowery, text, rectColor = (255, 0, 0), textFontColor = (255, 255, 255)):
+# Overlays a rectangle and text on top of an image of choice;
+def overlayRect(image1, bottomRightx, bottomRighty, topLeftx, topLefty, text, rectColor = (255, 0, 0), textFontColor = (255, 255, 255)):
     image = cv2.imread(image1)
-    rectImage = cv2.rectangle(image, (upperx, uppery), (lowerx, lowery), rectColor, 2)
-    textImage = cv2.putText(rectImage, text,(lowerx, lowery), 1,
+    rectImage = cv2.rectangle(image, (bottomRightx, bottomRighty), (topLeftx, topLefty), rectColor, 2)
+    textImage = cv2.putText(rectImage, text,(topLeftx, topLefty), 1,
                             1, textFontColor, 2)
     cv2.imshow(image1, textImage)
     cv2.waitKey(0)
