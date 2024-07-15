@@ -35,6 +35,14 @@ def rescaleFrame(frame, scale=0.75):
 if not os.path.exists(asset_zip_path):
     download_and_unzip(URL, asset_zip_path)
 
+# Open Image
+path = r'C:\Users\allan\PycharmProjects\opencv\ImageName'
+image = cv2.imread(path)
+window_name = "ImageName"
+cv2.imshow(window_name, image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
 # Open Videos
 capture = cv2.VideoCapture("lp_image.mov")
 while True:
