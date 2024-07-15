@@ -24,6 +24,13 @@ def download_and_unzip(url, save_path):
     except Exception as e:
         print("\nInvalid file.", e)
 
+def rescaleFrame(frame, scale=0.75): 
+    # rescales images, video, live-video
+    width = int(frame.shape[1] * scale)
+    height = int(frame.shape[0] * scale)
+    dimensions = (width,height)
+    return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
+
 # Download if assest ZIP does not exists.
 if not os.path.exists(asset_zip_path):
     download_and_unzip(URL, asset_zip_path)
