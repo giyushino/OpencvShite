@@ -300,4 +300,23 @@ def vidRect(vid):
     cap.release()
 
 
+def betterEdge(vid):
+    cap = cv2.VideoCapture(vid)
+    while(1):
+        _, frame = cap.read()
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        sobelx = cv2.Sobel(frame, cv2.CV_64F, 1, 0, ksize=5)
+        sobely = cv2.Sobel(frame, cv2.CV_64F, 0, 1, ksize=5)
+        laplacian = cv2.Laplacian(frame, cv2.CV_64F)
+        cv2.imshow('sobelx', sobelx)
+        cv2.imshow('sobely', sobely)
+        cv2.imshow('laplacian', laplacian)
+
+        if cv2.waitKey(1) & 0xFF == ord('d'):
+            break
+
+    cv2.destroyAllWindows()
+    cap.release()
+
+
 
