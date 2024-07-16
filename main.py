@@ -280,5 +280,23 @@ def captureFrames(vid):
             current_frame += 1
         else:
             break
+            
+def vidRect(vid):
+    cap = cv2.VideoCapture(vid)
+    output = cv2.VideoWriter("output.avi", cv2.VideoWriter_fourcc(*'XVID'), 30, (1080, 1920))
+
+    while(True):
+        ret, frame = cap.read()
+        if (ret):
+            cv2.rectangle(frame, (100, 100), (500, 500), (0, 255, 0), 2)
+            output.write(frame)
+            cv2.imshow("output", frame)
+        if cv2.waitKey(1) & 0xFF == ord('d'):
+            break
+
+    cv2.destroyAllWindows()
+    output.release()
+    cap.release()
+
 
 
