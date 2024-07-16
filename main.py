@@ -25,28 +25,49 @@ def download_and_unzip(url, save_path):
     except Exception as e:
         print("\nInvalid file.", e)
 
-# Opens an image; img is name of file formatted as a string
 def openImage(img):
     image = cv2.imread("{0}".format(img))
     window_name = "{0}".format(img)
     cv2.imshow(window_name, image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    
-def rescaleFrame(frame, scale= 1):
+def rescaleFrame(frame, scale):
     # rescales images, video, live-video
     width = int(frame.shape[1] * scale)
     height = int(frame.shape[0] * scale)
-    dimensions = (width, height)
+    dimensions = (width,height)
     return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
 
-# Opens a video; vid is name of file formatted as a string
-def openVideo(vid):
-    capture = cv2.VideoCapture("{}".format(vid))
+def rotation(img, angle, scale = 1):
+    image = cv2.imread(img)
+    img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    center = (img_rgb.shape[1]/2, img_rgb.shape[0]/2)
+    rotation_matrix = cv2.getRotationMatrix2D(center,angle, scale)
+
+    rotated_image = cv2.warpAffine(img_rgb, rotation_matrix, (image.shape[1], image.shape[0]))
+    cv2.imshow("Rotated Image", rotated_image)
+    if cv2.waitKey(0) & 0xff == 27:
+        cv2.destroyAllWindows()
+
+def edgeDetection(img):
+    image = cv2.imread(img)
+    if image is None:
+        print("Could not read image path")
+        return
+
+    cv2.imshow("Original", image)
+    edge_detect = cv2.Canny(image, 100, 200)
+    cv2.imshow("Edges", edge_detect)
+    if cv2.waitKey(0) & 0xff == 27:
+        cv2.destroyAllWindows()
+
+def openVideo(vid, scale = 1):
+    capture = cv2.VideoCapture(vid)
     while True:
         isTrue, frame = capture.read()
-        resized_frame = rescaleFrame(frame)
-        cv2.imshow('Video', frame)
+        resized_frame = rescaleFrame(frame, scale)
+        cv2.imshow('Video', resized_frame)
         if cv2.waitKey(20) & 0xFF==ord('d'):
             break
     capture.release()
@@ -84,28 +105,6 @@ def overlayImages(img1, img2, w1, w2, gamma = 0):
     if cv2.waitKey(0) & 0xff == 27:
         cv2.destroyAllWindows()
 
-def detectLines(img):
-    img = cv2.imread("{0}".format(img))
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
-    lines = cv2.HoughLines(edges, 1, np.pi/180, 120)
-
-    for r_theta in lines:
-        arr = np.array(r_theta[0], dtype = np.float64)
-        r, theta = arr
-        a = np.cos(theta)
-        b = np.sin(theta)
-        x0 = a * r
-        y0 = b * r
-        x1 = int(x0 + 1000 * (-b))
-        y1 = int(y0 + 1000 * (a))
-        x2 = int(x0 - 1000 * (-b))
-        y2 = int(y0 - 1000 * (a))
-        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-
-    cv2.imwrite('linesDetected.jpg', img)
-    openImage("linesDetected.jpg")
-    
 def grayscale(img):
     image = cv2.imread(img)
     wn = "Gray Scale {0}".format(img)
@@ -152,6 +151,28 @@ def subtractImages(img1, img2):
 
     if cv2.waitKey(0) & 0xff == 27:
         cv2.destroyAllWindows()
+
+def detectLines(img):
+    img = cv2.imread("{0}".format(img))
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+    lines = cv2.HoughLines(edges, 1, np.pi/180, 120)
+
+    for r_theta in lines:
+        arr = np.array(r_theta[0], dtype = np.float64)
+        r, theta = arr
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a * r
+        y0 = b * r
+        x1 = int(x0 + 1000 * (-b))
+        y1 = int(y0 + 1000 * (a))
+        x2 = int(x0 - 1000 * (-b))
+        y2 = int(y0 - 1000 * (a))
+        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+
+    cv2.imwrite('linesDetected.jpg', img)
+    openImage("linesDetected.jpg")
 
 def bitwiseOperator(img1, img2, operator, mask = None):
     image1 = cv2.imread(img1)
@@ -204,6 +225,17 @@ def blurring(img, blur, scale = 1):
         return "That is not a valid blur; please choose between gaussian, median, or bilateral."
     cv2.destroyAllWindows()
 
+def webCamCapture():
+    vid = cv2.VideoCapture(0)
+    while(True):
+        ret, frame = vid.read()
+        cv2.imshow('frame', frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('d'):
+            break
+    vid.release()
+    cv2.destroyAllWindows()
+
 def vidEdgeCapture(vid):
     cap = cv2.VideoCapture(vid)
     while(cap.isOpened()):
@@ -235,8 +267,5 @@ def captureFrames(vid):
             current_frame += 1
         else:
             break
-
-    cam.release()
-    cv2.destroyAllWindows()
 
 
