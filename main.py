@@ -31,6 +31,7 @@ def openImage(img):
     cv2.imshow(window_name, image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    
 def rescaleFrame(frame, scale):
     # rescales images, video, live-video
     width = int(frame.shape[1] * scale)
