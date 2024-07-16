@@ -249,6 +249,19 @@ def vidEdgeCapture(vid):
     cap.release()
     cv2.destroyAllWindows()
 
+def vidGaussianBlur(vid):
+    cap = cv2.VideoCapture(vid)
+    while (cap.isOpened()):
+        ret, frame = cap.read()
+        frame = cv2.resize(frame, (540, 380), fx=0, fy=0, interpolation=cv2.INTER_CUBIC)
+        cv2.imshow("Frame", frame)
+        gaussianblur = cv2.GaussianBlur(frame, (9,9), 0)
+        cv2.imshow("Gaussianblur", gaussianblur)
+        if cv2.waitKey(25) & 0xFF == ord("d"):
+            break
+    cap.release()
+    cv2.destroyAllWindows()
+
 def captureFrames(vid):
     cam = cv2.VideoCapture(vid)
     try:
