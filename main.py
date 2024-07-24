@@ -333,8 +333,10 @@ def betterEdge(vid):
     cv2.destroyAllWindows()
     cap.release()
 
-
 # Open terminal; type python main.py(whatever the file name you're writing on is called) --image file_name 
+refPt = []
+cropping = False
+
 def click(event, x, y, flags, param):
     global refPt, cropping
     if event == cv2.EVENT_LBUTTONDOWN:
