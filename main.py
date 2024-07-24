@@ -25,6 +25,13 @@ def download_and_unzip(url, save_path):
     except Exception as e:
         print("\nInvalid file.", e)
 
+# If images are stored in folders, search folder and join image and folder location
+def find_image(base_folder, image_name):
+    for root, dirs, files in os.walk(base_folder):
+        if image_name in files:
+            return os.path.join(root, image_name)
+
+
 def openImage(img):
     image = cv2.imread("{0}".format(img))
     window_name = "{0}".format(img)
